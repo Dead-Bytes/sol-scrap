@@ -1,0 +1,43 @@
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.26</span><span class="p">;</span>
+
+<span class="c1">// This will only compile via IR</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">Coin</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The keyword "public" makes variables</span>
+<span class="w">    </span><span class="c1">// accessible from other contracts</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">minter</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>balances<span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Events allow clients to react to specific</span>
+<span class="w">    </span><span class="c1">// contract changes you declare</span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Sent</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">from</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Constructor code is only run when the contract</span>
+<span class="w">    </span><span class="c1">// is created</span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span>minter<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Sends an amount of newly created coins to an address</span>
+<span class="w">    </span><span class="c1">// Can only be called by the contract creator</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>minter<span class="p">);</span>
+<span class="w">        </span>balances<span class="p">[</span>receiver<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Errors allow you to provide information about</span>
+<span class="w">    </span><span class="c1">// why an operation failed. They are returned</span>
+<span class="w">    </span><span class="c1">// to the caller of the function.</span>
+<span class="w">    </span>error<span class="w"> </span>InsufficientBalance<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">requested</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">available</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Sends an amount of existing coins</span>
+<span class="w">    </span><span class="c1">// from any caller to an address</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">send</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>amount<span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">],</span><span class="w"> </span>InsufficientBalance<span class="p">(</span>amount<span class="p">,</span><span class="w"> </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">]));</span>
+<span class="w">        </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span>amount<span class="p">;</span>
+<span class="w">        </span>balances<span class="p">[</span>receiver<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span>
+<span class="w">        </span>emit<span class="w"> </span>Sent<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>

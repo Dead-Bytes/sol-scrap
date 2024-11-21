@@ -623,3 +623,13 @@ https://docs.soliditylang.org/en/v0.8.28/ir-breaking-changes.html#internal-funct
 https://docs.soliditylang.org/en/v0.8.28/050-breaking-changes.html
 https://docs.soliditylang.org/en/v0.8.28/contracts.html#immutable
 https://docs.soliditylang.org/en/v0.8.28/contracts.html#functions
+https://docs.soliditylang.org/en/v0.8.28/contracts.html#function-parameters-and-return-variables
+https://docs.soliditylang.org/en/v0.8.28/ir-breaking-changes.html#cleanup
+https://docs.soliditylang.org/en/v0.8.28/060-breaking-changes.html
+https://docs.soliditylang.org/en/v0.8.28/contracts.html#function-parameters
+https://docs.soliditylang.org/tr/latest/internals/optimizer.html
+https://docs.soliditylang.org/tr/latest/metadata.html
+https://docs.soliditylang.org/en/v0.8.28/smtchecker.html#timeout
+https://docs.soliditylang.org/en/v0.8.28/yul.html#memoryguard
+https://docs.soliditylang.org/en/v0.8.28/style-guide.html#tabs-or-spaces
+https://docs.soliditylang.org/en/v0.8.28/types.html#rational-literals
